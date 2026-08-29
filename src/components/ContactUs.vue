@@ -51,6 +51,9 @@
           <form @submit.prevent="handleSubmit" class="contact-form">
             <h3>Send Us a Message</h3>
 
+            <!-- Honeypot: hidden from humans via CSS, bots fill every field -->
+            <input v-model="form.botcheck" type="text" name="botcheck" class="botcheck-field" tabindex="-1" autocomplete="off" />
+
             <div class="form-row">
               <div class="form-group">
                 <label>Your Name</label>
@@ -81,14 +84,26 @@
               <textarea v-model="form.message" rows="5" placeholder="Tell us about your traffic volume, platform, and monetization goals..." required></textarea>
             </div>
 
-            <button type="submit" class="btn-primary submit-btn" :class="{ sending }">
-              <span v-if="!sent && !sending">
-                Send Message
+            <p v-if="status === 'error'" class="form-status form-status-error">
+              Something went wrong sending your message. Please try again.
+            </p>
+            <p v-if="status === 'success' && isDemo" class="form-status form-status-demo">
+              Demo mode: form validated, but no delivery provider is configured yet — nothing was actually sent.
+            </p>
+
+            <button
+              type="submit"
+              class="btn-primary submit-btn"
+              :class="{ sending: status === 'sending' }"
+              :disabled="status === 'sending'"
+            >
+              <span v-if="status === 'idle' || status === 'error'">
+                {{ status === 'error' ? 'Retry' : 'Send Message' }}
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                   <path d="M14 2L1 8.5l4 1.5 2 4 2-4 5-8z" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
               </span>
-              <span v-else-if="sending">Sending...</span>
+              <span v-else-if="status === 'sending'">Sending...</span>
               <span v-else>
                 Message Sent!
                 <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -105,10 +120,11 @@
 
 <script setup>
 import { ref } from 'vue'
+import { submitLead, isDemoMode } from '../lib/leadDelivery.js'
 
-const form = ref({ name: '', email: '', trafficType: '', message: '' })
-const sending = ref(false)
-const sent = ref(false)
+const form = ref({ name: '', email: '', trafficType: '', message: '', botcheck: '' })
+const status = ref('idle') // idle | sending | success | error
+const isDemo = ref(isDemoMode())
 
 const info = [
   {
@@ -137,12 +153,16 @@ const promises = [
 ]
 
 const handleSubmit = async () => {
-  sending.value = true
-  await new Promise(r => setTimeout(r, 1400))
-  sending.value = false
-  sent.value = true
-  form.value = { name: '', email: '', trafficType: '', message: '' }
-  setTimeout(() => { sent.value = false }, 5000)
+  status.value = 'sending'
+  try {
+    const result = await submitLead(form.value)
+    isDemo.value = result.demo
+    status.value = 'success'
+    form.value = { name: '', email: '', trafficType: '', message: '', botcheck: '' }
+    setTimeout(() => { status.value = 'idle' }, 5000)
+  } catch (err) {
+    status.value = 'error'
+  }
 }
 </script>
 
@@ -289,6 +309,33 @@ input:focus, select:focus, textarea:focus {
   font-size: 1rem;
 }
 .submit-btn.sending { opacity: 0.8; pointer-events: none; }
+
+.botcheck-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.form-status {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  margin: -8px 0 16px;
+  padding: 12px 14px;
+  border-radius: 10px;
+}
+.form-status-error {
+  color: #FCA5A5;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+}
+.form-status-demo {
+  color: #A78BFA;
+  background: rgba(124,58,237,0.1);
+  border: 1px solid rgba(124,58,237,0.2);
+}
 
 @media (max-width: 900px) {
   .contact-grid { grid-template-columns: 1fr; }

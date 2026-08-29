@@ -43,12 +43,12 @@
 - [ ] **Audit the contact form on the live site** — via Claude in Chrome inspect the `<form>`: its `action` URL, `method`, field names, and where the submission goes (own endpoint? Formspree/third-party? mailto?). Record findings in `docs/content.md` → "Live form behaviour" so the user can replicate the same backend. **Do not submit** the real form during the audit.
 - [ ] **Full functional test via Claude in Chrome** — walk our deployed site (https://mrnednick.github.io/oxfeeds-landing/): nav links, anchors, quiz, GDPR banner, legal pages, 404, responsive/mobile. Log any issues here.
 
-## P7 — Contact backend 🔜
+## P7 — Contact backend 🔄 (mostly done)
 
-The form (`ContactUs.vue` → `handleSubmit`) is front-end only — it fakes a 1.4s delay then shows success; **sends nothing**.
-- [ ] Decide backend based on P6 form audit (match what the live site uses, or Formspree/Web3Forms → `office@oxfeeds.com`).
-- [ ] Wire `handleSubmit` to a real POST; show real error states.
-- [ ] Add spam protection (honeypot field).
+- [x] Wire `handleSubmit` to a real POST via `src/lib/leadDelivery.js` (Web3Forms) with real `idle/sending/success/error` states and a retry button.
+- [x] Add spam protection (honeypot field, `botcheck`).
+- [x] Integration test for the delivery adapter (`src/lib/leadDelivery.test.js`, Vitest).
+- [ ] Set `VITE_WEB3FORMS_KEY` (get a key at web3forms.com for `office@oxfeeds.com`) — until then the form honestly runs in demo mode and says so in the UI. Still pending P6's live-site form audit to confirm this matches what oxfeeds.com itself uses.
 
 ## P8 — Polish & launch 🔜
 

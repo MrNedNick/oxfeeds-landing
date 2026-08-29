@@ -30,7 +30,7 @@ What exists today:
 - `MarqueeStrip` ticker
 - `ServicesSection` (the search feeds) — 3D tilt cards
 - `HowItWorks` · `WhyUs` · interactive `QuizSection`
-- `AboutUs` · `ContactUs` (form is **front-end only**, see roadmap P-Backend)
+- `AboutUs` · `ContactUs` (form posts via `src/lib/leadDelivery.js` — honest demo mode until `VITE_WEB3FORMS_KEY` is set, see roadmap P7)
 - `FooterSection` + GDPR cookie banner (`GdprBanner`, per-category consent in `localStorage`)
 - Legal pages: `/privacy`, `/terms`, `/cookies`, `/gdpr` (shared `LegalLayout`), plus `404`
 
@@ -43,6 +43,8 @@ npm run dev -- --port 5175
 ```
 Open http://localhost:5175 . (Also registered as `oxfeeds`, port 5175, in the project-root `.claude/launch.json`.)
 See the `dev-server` skill for details.
+
+Run tests: `npm run test` (Vitest).
 
 ## How to deploy
 
