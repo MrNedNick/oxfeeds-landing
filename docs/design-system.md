@@ -38,7 +38,7 @@ Modern 2026, **purple/pink on a deep near-black** dark theme: glassmorphism, gra
 
 ## Animations (all opt-out under `prefers-reduced-motion`)
 
-Driven by the three composables + CSS keyframes in `style.css`.
+Driven by the three ui-registry hooks (`src/lib/vue/`) + CSS keyframes in `style.css`.
 
 | Effect | Where | How |
 |--------|-------|-----|

@@ -22,7 +22,8 @@ oxfeeds-landing/
    ├─ router/index.js      ← routes + scrollBehavior + document.title
    ├─ views/               ← routed pages
    ├─ components/          ← UI building blocks
-   └─ composables/         ← shared reactive behaviours
+   ├─ composables/         ← project-specific reactive behaviours (lead form)
+   └─ lib/                 ← animation hooks copied in from ui-registry
 ```
 
 ## Routing (`src/router/index.js`)
@@ -63,13 +64,16 @@ oxfeeds-landing/
 | `GdprBanner.vue` | Slide-up cookie consent; 3 categories (Essential/Analytics/Marketing); `localStorage` persistence |
 | `LegalLayout.vue` | Shared layout for the 4 legal pages: breadcrumb, hero orbs, sticky sidebar |
 
-## Composables (`src/composables/`) — the reusable engine
+## Animation hooks (`src/lib/vue/`) — from ui-registry
 
-These are **portable** (used to seed mobilynx too). Keep them framework-pure and selector-driven.
+These used to be hand-maintained composables under `src/composables/`, duplicated
+byte-for-byte in mobilynx-landing. They now live in `ui-registry` (`use-count-up`,
+`use-scroll-reveal`, `use-tilt`) and are copied in via `scripts/add.mjs --framework
+vue`; `src/lib/core/*.ts` holds the framework-agnostic logic each one wraps.
 
-- **`useScrollReveal.js`** — `IntersectionObserver` adds `.visible` to `.reveal` / `.reveal-*` elements when they enter the viewport.
-- **`useCountUp.js`** — animates elements with `[data-count]` from 0 to target (easeOutExpo) when they scroll into view; supports a suffix.
-- **`useTilt.js`** — 3D mouse tilt (`perspective` + `rotateX/Y`) on a CSS selector; cleans up listeners on unmount; **skips when `prefers-reduced-motion`**.
+- **`use-scroll-reveal.ts`** — `IntersectionObserver` adds `.visible` to `.reveal` / `.reveal-*` elements when they enter the viewport.
+- **`use-count-up.ts`** — animates elements with `[data-count]` from 0 to target (easeOutExpo) when they scroll into view; supports a suffix. Render the target value as the element's own static content — the hook overwrites it, and reduced-motion leaves it as-is.
+- **`use-tilt.ts`** — 3D mouse tilt (`perspective` + `rotateX/Y`) on a CSS selector; cleans up listeners on unmount; **skips when `prefers-reduced-motion`**.
 
 ## Build & base path (`vite.config.js`)
 
