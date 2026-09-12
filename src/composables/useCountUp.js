@@ -2,6 +2,8 @@ import { onMounted, onUnmounted, nextTick } from 'vue'
 
 // Animates elements matching `selector` from 0 up to their data-count value
 // when they scroll into view. Supports data-suffix (e.g. "+") and data-duration (ms).
+// The markup already holds the final value as a static fallback, so a failed
+// observer or disabled JS still shows the real number instead of "0".
 export function useCountUp(selector) {
   let observer
 
@@ -9,6 +11,7 @@ export function useCountUp(selector) {
     const target = parseFloat(el.dataset.count || '0')
     const suffix = el.dataset.suffix || ''
     const duration = parseInt(el.dataset.duration || '1400', 10)
+    el.textContent = '0' + suffix
     const start = performance.now()
 
     const step = (now) => {
@@ -23,6 +26,11 @@ export function useCountUp(selector) {
 
   onMounted(async () => {
     await nextTick()
+    const elements = document.querySelectorAll(selector)
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      // Final value is already in the markup — just leave it be.
+      return
+    }
     observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((e) => {
@@ -34,7 +42,7 @@ export function useCountUp(selector) {
       },
       { threshold: 0.5 }
     )
-    document.querySelectorAll(selector).forEach((el) => observer.observe(el))
+    elements.forEach((el) => observer.observe(el))
   })
 
   onUnmounted(() => observer && observer.disconnect())
