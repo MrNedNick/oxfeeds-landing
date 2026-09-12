@@ -69,6 +69,7 @@
 
 ## Done log
 
+- `162cbc4` / `fa4c190` (2026-09-12) — Hero stat counters (`.count-up`) could get stuck showing "0" if the `IntersectionObserver` never fired (JS error, crawler, no-JS view). Markup now holds the real final value as a static fallback; the composable resets to "0" only once it actually starts animating, and skips animating entirely under `prefers-reduced-motion`.
 - `f864476` (2026-06-14) — Fixed Pages deploy (removed `enablement: true`; enabled Pages via API). Site live.
 - `9212061` — GitHub Pages workflow + SPA 404 fallback config.
 - `a87a997` — Initial build: redesign, routing, animations, GDPR.
