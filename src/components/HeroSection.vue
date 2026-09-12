@@ -45,12 +45,12 @@
 
       <div class="hero-stats reveal delay-4">
         <div class="stat">
-          <div class="stat-num gradient-text count-up" data-count="3">0</div>
+          <div class="stat-num gradient-text count-up" data-count="3">3</div>
           <div class="stat-label">Major Search Partners</div>
         </div>
         <div class="stat-sep"></div>
         <div class="stat">
-          <div class="stat-num gradient-text count-up" data-count="7" data-suffix="+">0</div>
+          <div class="stat-num gradient-text count-up" data-count="7" data-suffix="+">7+</div>
           <div class="stat-label">Traffic Formats</div>
         </div>
         <div class="stat-sep"></div>
