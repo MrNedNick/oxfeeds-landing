@@ -58,7 +58,7 @@
 
 <script setup>
 import LegalLayout from '../components/LegalLayout.vue'
-import { useScrollReveal } from '../composables/useScrollReveal'
+import { useScrollReveal } from '../lib/vue/use-scroll-reveal'
 useScrollReveal()
 
 const cookies = [

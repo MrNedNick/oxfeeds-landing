@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useTilt } from '../composables/useTilt'
+import { useTilt } from '../lib/vue/use-tilt'
 
 useTilt('.why-card')
 

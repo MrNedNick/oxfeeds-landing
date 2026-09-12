@@ -92,7 +92,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useCountUp } from '../composables/useCountUp'
+import { useCountUp } from '../lib/vue/use-count-up'
 
 useCountUp('.count-up')
 

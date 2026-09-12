@@ -20,7 +20,7 @@ import WhyUs from '../components/WhyUs.vue'
 import QuizSection from '../components/QuizSection.vue'
 import AboutUs from '../components/AboutUs.vue'
 import ContactUs from '../components/ContactUs.vue'
-import { useScrollReveal } from '../composables/useScrollReveal'
+import { useScrollReveal } from '../lib/vue/use-scroll-reveal'
 
 useScrollReveal()
 </script>
