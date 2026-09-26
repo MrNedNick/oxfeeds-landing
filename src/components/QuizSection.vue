@@ -6,108 +6,101 @@
     <div class="container">
       <div class="quiz-wrap glass-card reveal">
         <div class="quiz-header">
-          <div class="section-tag" style="margin-bottom:16px">
-            <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="currentColor" opacity=".4"/><circle cx="6" cy="6" r="2.5" fill="currentColor"/></svg>
-            Quick Quiz
-          </div>
-          <h2 class="section-title">Not Sure Where to <span class="gradient-text">Start?</span></h2>
-          <p class="section-sub" style="margin:0">Tell us about your traffic and we'll recommend the perfect monetization strategy.</p>
+          <p class="eyebrow">Don't know what to deal with?</p>
+          <h2 class="section-title">Take <span class="gradient-text">a quick quiz</span></h2>
         </div>
 
-        <div v-if="!submitted">
-          <div class="quiz-options">
-            <button
-              v-for="opt in options"
-              :key="opt.id"
-              class="quiz-opt"
-              :class="{ selected: selected === opt.id }"
-              @click="selected = opt.id">
-              <div class="opt-icon" v-html="opt.icon"></div>
-              <span>{{ opt.label }}</span>
+        <LeadSuccess v-if="status === 'success'" :demo="demo" />
+
+        <form v-else class="quiz-form" @submit.prevent="onSubmit">
+          <ol class="quiz-progress" aria-label="Quiz steps">
+            <li v-for="n in 3" :key="n" :class="{ done: n < step, current: n === step }" :aria-current="n === step ? 'step' : undefined">
+              {{ n }}
+            </li>
+          </ol>
+
+          <fieldset v-if="step === 1">
+            <legend ref="legend" tabindex="-1" class="quiz-q">What search activity are you interested in?</legend>
+            <div class="quiz-options">
+              <label v-for="opt in activities" :key="opt" class="quiz-opt" :class="{ selected: activity === opt }">
+                <input v-model="activity" type="radio" name="activity" :value="opt" class="sr-only" />
+                {{ opt }}
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset v-else-if="step === 2">
+            <legend ref="legend" tabindex="-1" class="quiz-q">Your daily traffic volume</legend>
+            <div class="quiz-options quiz-options-3">
+              <label v-for="opt in volumes" :key="opt" class="quiz-opt" :class="{ selected: volume === opt }">
+                <input v-model="volume" type="radio" name="volume" :value="opt" class="sr-only" />
+                {{ opt }}
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset v-else>
+            <legend ref="legend" tabindex="-1" class="quiz-q">How can we reach you?</legend>
+            <LeadFields v-model="fields" />
+          </fieldset>
+
+          <p v-if="status === 'error'" class="form-error" role="alert">
+            Something went wrong sending your answers. Please try again.
+          </p>
+
+          <div class="quiz-actions">
+            <button v-if="step > 1" type="button" class="btn-secondary" @click="go(step - 1)">Return</button>
+            <button v-if="step < 3" type="button" class="btn-primary" :disabled="!answered" @click="go(step + 1)">Next</button>
+            <button v-else type="submit" class="btn-primary" :disabled="status === 'sending'">
+              {{ status === 'sending' ? 'Sending…' : 'Send' }}
             </button>
           </div>
-
-          <div class="quiz-action">
-            <button class="btn-primary" :disabled="!selected" @click="submit">
-              Get My Recommendation
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        <div v-else class="quiz-result">
-          <div class="result-icon">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="url(#rg)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs>
-              <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/>
-            </svg>
-          </div>
-          <h3>Great choice! Here's our recommendation:</h3>
-          <div class="result-card">
-            <div class="result-feed gradient-text">{{ result.feed }}</div>
-            <p>{{ result.desc }}</p>
-          </div>
-          <a href="#contact" class="btn-primary" style="margin-top: 24px">Talk to an Expert</a>
-          <button class="btn-secondary" style="margin-top: 12px" @click="reset">Try Again</button>
-        </div>
+        </form>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, nextTick } from 'vue'
+import LeadFields from './LeadFields.vue'
+import LeadSuccess from './LeadSuccess.vue'
+import { useLeadForm } from '../lib/useLeadForm.js'
 
-const selected = ref(null)
-const submitted = ref(false)
-
-const options = [
-  {
-    id: 'ext',
-    label: 'Extensions & Add-ons',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>`
-  },
-  {
-    id: 'web',
-    label: 'Website Search',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`
-  },
-  {
-    id: 'app',
-    label: 'Apps & Launchers',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>`
-  },
-  {
-    id: 'native',
-    label: 'Native to Search',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>`
-  },
-  {
-    id: 'display',
-    label: 'Display to Search',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="14" rx="2"/><path d="M7 22h10M12 17v5"/></svg>`
-  },
-  {
-    id: 's2s',
-    label: 'Search to Search',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14M7 23l-4-4 4-4"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>`
-  }
+// Questions and answers word for word from the quiz on oxfeeds.com.
+const activities = [
+  'Extensions and Add-ons',
+  'Website Search',
+  'Apps and Launchers',
+  'Native to Search',
+  'Display to Search',
+  'Search to Search'
+]
+const volumes = [
+  'Under 10 000 searches',
+  '10 000 searches - 100 000 searches',
+  'More than 100 000 searches'
 ]
 
-const recommendations = {
-  ext: { feed: 'Google RSOC / Yahoo N2S', desc: 'Browser extensions benefit most from search feed solutions. We recommend Google RSOC for high-intent users and Yahoo N2S for broader monetization.' },
-  web: { feed: 'Google Type-in / Bing N2S', desc: 'Websites with search bars are ideal for Type-in feeds. Google Type-in delivers excellent RPM for organic search traffic.' },
-  app: { feed: 'Yahoo N2S / Bing N2S', desc: 'Mobile and desktop apps perform best with N2S feeds. Yahoo N2S offers wide coverage and competitive rates for app traffic.' },
-  native: { feed: 'Google RSOC / Yahoo N2S', desc: 'Native traffic converts well with RSOC and N2S feeds. Our team will optimize the flow to maximize your conversion rate.' },
-  display: { feed: 'Google RSOC / Bing N2S', desc: 'Display-to-search is a powerful flow we specialize in. We\'ll set up a custom funnel to maximize your RPM from display campaigns.' },
-  s2s: { feed: 'All Premium Feeds', desc: 'Search-to-search traffic gets access to our full premium feed portfolio. We\'ll match you with the highest-yielding provider for your specific query types.' }
+const step = ref(1)
+const activity = ref('')
+const volume = ref('')
+const legend = ref(null)
+const { fields, status, demo, send } = useLeadForm()
+
+const answered = computed(() => (step.value === 1 ? activity.value : volume.value) !== '')
+
+// Moving between steps swaps the question; focus follows it so a keyboard
+// or screen-reader user lands on the new question, not on a vanished button.
+async function go(next) {
+  step.value = next
+  await nextTick()
+  legend.value?.focus()
 }
 
-const result = computed(() => recommendations[selected.value] || {})
-const submit = () => { if (selected.value) submitted.value = true }
-const reset = () => { submitted.value = false; selected.value = null }
+function onSubmit() {
+  send({ form: 'quiz', activity: activity.value, volume: volume.value })
+}
 </script>
 
 <style scoped>
@@ -127,35 +120,64 @@ const reset = () => { submitted.value = false; selected.value = null }
 .quiz-wrap {
   max-width: 820px;
   margin: 0 auto;
-  padding: 60px;
+  padding: 56px;
   text-align: center;
   position: relative;
 }
 
-.quiz-header { margin-bottom: 48px; }
+.quiz-header { margin-bottom: 32px; }
+
+fieldset { border: 0; min-width: 0; }
+
+.quiz-progress {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.quiz-progress li {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.85rem;
+  font-weight: 700;
+  border: 1px solid var(--card-border);
+  color: var(--text-muted);
+}
+.quiz-progress li.done { border-color: rgba(124,58,237,0.5); color: var(--purple-light); }
+.quiz-progress li.current { background: var(--gradient); border-color: transparent; color: #fff; }
+
+.quiz-q {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 auto 24px;
+  outline: none;
+}
 
 .quiz-options {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-  margin-bottom: 36px;
+  gap: 14px;
 }
+.quiz-options-3 { grid-template-columns: repeat(3, 1fr); }
 
 .quiz-opt {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 24px 16px;
+  justify-content: center;
+  min-height: 72px;
+  padding: 18px 16px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 16px;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.92rem;
   font-weight: 600;
   color: var(--text-muted);
   transition: all 0.25s ease;
-  font-family: inherit;
 }
 .quiz-opt:hover {
   border-color: rgba(124,58,237,0.4);
@@ -169,68 +191,26 @@ const reset = () => { submitted.value = false; selected.value = null }
   color: var(--text);
   box-shadow: 0 0 0 1px rgba(124,58,237,0.4), 0 8px 20px rgba(124,58,237,0.15);
 }
-.quiz-opt.selected .opt-icon { color: var(--purple-light); }
-
-.opt-icon {
-  color: var(--text-faint);
-  transition: color 0.25s;
+.quiz-opt:has(input:focus-visible) {
+  outline: 2px solid var(--purple-light);
+  outline-offset: 2px;
 }
-.quiz-opt:hover .opt-icon { color: var(--purple-light); }
 
-.quiz-action {
+.quiz-actions {
   display: flex;
   justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
 }
-.quiz-action button:disabled {
+.quiz-actions button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
   transform: none !important;
 }
 
-.quiz-result {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 16px;
-}
-.result-icon {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background: var(--gradient-subtle);
-  border: 1px solid rgba(124,58,237,0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.quiz-result h3 {
-  font-size: 1.2rem;
-  font-weight: 700;
-}
-.result-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 16px;
-  padding: 24px 32px;
-  width: 100%;
-  max-width: 480px;
-}
-.result-feed {
-  font-size: 1.4rem;
-  font-weight: 800;
-  margin-bottom: 8px;
-}
-.result-card p {
-  font-size: 0.9rem;
-  color: var(--text-muted);
-  line-height: 1.65;
-}
-
 @media (max-width: 700px) {
-  .quiz-wrap { padding: 36px 24px; }
-  .quiz-options { grid-template-columns: repeat(2, 1fr); }
-}
-@media (max-width: 480px) {
-  .quiz-options { grid-template-columns: 1fr; }
+  .quiz-wrap { padding: 36px 20px; }
+  .quiz-options, .quiz-options-3 { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .quiz-opt { min-height: 60px; padding: 12px 10px; font-size: 0.85rem; }
 }
 </style>

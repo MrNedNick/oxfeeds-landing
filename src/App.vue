@@ -8,7 +8,6 @@
       </transition>
     </router-view>
     <FooterSection />
-    <GdprBanner />
   </div>
 </template>
 
@@ -16,7 +15,6 @@
 import ScrollProgress from './components/ScrollProgress.vue'
 import NavBar from './components/NavBar.vue'
 import FooterSection from './components/FooterSection.vue'
-import GdprBanner from './components/GdprBanner.vue'
 </script>
 
 <style>

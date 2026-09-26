@@ -43,12 +43,10 @@ Driven by the three ui-registry hooks (`src/lib/vue/`) + CSS keyframes in `style
 | Effect | Where | How |
 |--------|-------|-----|
 | Scroll reveal | whole page | `useScrollReveal` toggles `.visible` on `.reveal*` |
-| Count-up stats | Hero | `useCountUp` eases `[data-count]` 0→target |
 | 3D card tilt | Services, WhyUs | `useTilt` perspective + rotateX/Y on mousemove |
 | Parallax orbs | Hero | mousemove offsets blurred orbs via rAF |
 | Particles | Hero | pre-generated absolutely-positioned dots, floating |
 | Marquee | MarqueeStrip | CSS `marquee` keyframe; pause on hover |
-| Gradient border | Hero badge | `@property --angle` + `conic-gradient` rotation (`rotate-border` keyframe) |
 | Scroll progress | top of page | `scaleX` tied to scroll position |
 | Page transition | route change | fade + translateY in `App.vue` |
 
@@ -58,7 +56,7 @@ Keyframes defined: `float1` / `float2`, `drift`, `gradient-shift`, `rotate-borde
 
 - **Tasteful, premium, not noisy.** Motion should feel designed, not gimmicky.
 - **Always honor `prefers-reduced-motion`** — `useTilt` already early-returns; keep new motion behind the same guard.
-- Easing: smooth `cubic-bezier` / `ease-in-out` for loops; `easeOutExpo` for count-up.
+- Easing: smooth `cubic-bezier` / `ease-in-out` for loops.
 
 ## Do / don't
 

@@ -1,29 +1,27 @@
 <template>
-  <section id="how-it-works" class="hiw-section">
+  <section id="how" class="hiw-section">
     <div class="hiw-bg">
       <div class="hiw-orb"></div>
     </div>
     <div class="container">
       <div class="section-header">
-        <div class="section-tag reveal">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" fill="currentColor" opacity=".4"/><circle cx="6" cy="6" r="2.5" fill="currentColor"/></svg>
-          Simple Process
-        </div>
-        <h2 class="section-title reveal delay-1">Get Running in <span class="gradient-text">Three Steps</span></h2>
-        <p class="section-sub reveal delay-2">Our streamlined onboarding gets you earning from search traffic in no time.</p>
+        <h2 class="section-title reveal">How <span class="gradient-text">It Works</span></h2>
       </div>
 
-      <div class="steps">
-        <div v-for="(step, i) in steps" :key="step.title" class="step-wrap reveal" :class="`delay-${i+1}`">
+      <ol class="steps">
+        <li v-for="(step, i) in steps" :key="step.title" class="step-wrap reveal" :class="`delay-${i+1}`">
           <div class="step-card glass-card">
             <div class="step-num">
               <span class="gradient-text">{{ String(i + 1).padStart(2, '0') }}</span>
             </div>
-            <div class="step-icon" v-html="step.icon"></div>
+            <div class="step-media">
+              <img class="step-img" :src="img(`pictures/${step.picture}`)" alt="" width="720" height="578" loading="lazy">
+              <img class="step-deco" :class="`step-deco-${i + 1}`" :src="img(`icons/${step.deco}`)" alt="" loading="lazy">
+            </div>
             <h3>{{ step.title }}</h3>
             <p>{{ step.desc }}</p>
           </div>
-          <div class="step-connector" v-if="i < steps.length - 1">
+          <div class="step-connector" v-if="i < steps.length - 1" aria-hidden="true">
             <svg viewBox="0 0 80 24" fill="none" class="connector-svg">
               <path d="M0 12 Q40 12 80 12" stroke="url(#grad)" stroke-width="1.5" stroke-dasharray="4 3"/>
               <polygon points="76,8 80,12 76,16" fill="url(#grad2)"/>
@@ -39,32 +37,35 @@
               </defs>
             </svg>
           </div>
-        </div>
-      </div>
-
-      <div class="hiw-cta reveal delay-4">
-        <a href="#contact" class="btn-primary">Start Your Integration</a>
-      </div>
+        </li>
+      </ol>
     </div>
   </section>
 </template>
 
 <script setup>
+import { img } from '../lib/assets.js'
+
+// Copy and pictures as on oxfeeds.com; the images are the site's own
+// illustrations of each step.
 const steps = [
   {
     title: 'Choose Your Feed',
-    desc: 'Select from Yahoo N2S/Type-in, Google RSOC/Type-in, or Bing N2S/Type-in feeds based on your traffic source and target audience.',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#sg1)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="sg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><path d="M9 3H5a2 2 0 00-2 2v4m6-6h10a2 2 0 012 2v4M9 3v18m0 0h10a2 2 0 002-2V9M9 21H5a2 2 0 01-2-2V9m0 0h18"/></svg>`
+    desc: 'Yahoo N2S/Type-in; Google RSOC/Type-in; Bing N2S/Type-in.',
+    picture: 'how-card-1.webp',
+    deco: 'card-element-1.svg'
   },
   {
     title: 'Integrate Seamlessly',
-    desc: 'Our clean API and search feed solutions make integration straightforward. Plug into any digital platform with minimal code changes.',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#sg2)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="sg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`
+    desc: 'Our API and search feed solutions make it easy to monetize your traffic.',
+    picture: 'how-card-2.webp',
+    deco: 'card-element-2.svg'
   },
   {
     title: 'Earn More',
-    desc: 'Access high-RPM feeds and large traffic caps. Watch your revenue grow with real-time analytics and dedicated account management.',
-    icon: `<svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="url(#sg3)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><defs><linearGradient id="sg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#7C3AED"/><stop offset="100%" stop-color="#EC4899"/></linearGradient></defs><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>`
+    desc: 'Get access to high-RPM feeds and large traffic caps.',
+    picture: 'how-card-3.webp',
+    deco: 'card-element-4.svg'
   }
 ]
 </script>
@@ -85,6 +86,7 @@ const steps = [
 }
 
 .steps {
+  list-style: none;
   display: flex;
   align-items: flex-start;
   gap: 0;
@@ -127,10 +129,30 @@ const steps = [
   opacity: 0.35;
 }
 
-.step-icon {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
+.step-media {
+  position: relative;
+  margin: 0 auto 24px;
+  max-width: 280px;
+}
+.step-img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 5 / 4;
+  object-fit: contain;
+}
+.step-deco {
+  position: absolute;
+  height: auto;
+  pointer-events: none;
+  animation: deco-float 6s ease-in-out infinite;
+}
+.step-deco-1 { width: 42%; right: -8%; top: -10%; }
+.step-deco-2 { width: 22%; left: -6%; bottom: -8%; animation-delay: -2s; }
+.step-deco-3 { width: 26%; right: -6%; bottom: -10%; animation-delay: -4s; }
+@keyframes deco-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
 
 .step-card h3 {
@@ -154,11 +176,6 @@ const steps = [
 .connector-svg {
   width: 100%;
   height: 24px;
-}
-
-.hiw-cta {
-  text-align: center;
-  margin-top: 56px;
 }
 
 @media (max-width: 900px) {

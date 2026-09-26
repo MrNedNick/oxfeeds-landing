@@ -2,25 +2,18 @@
   <header :class="['navbar', { scrolled: isScrolled }]">
     <div class="container nav-inner">
       <router-link to="/" class="logo">
-        <div class="logo-icon">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </div>
-        <span class="logo-name">OXFeeds</span>
+        <img :src="img('logo.svg')" alt="Oxfeeds" width="163" height="39" class="logo-img">
       </router-link>
 
       <nav class="nav-links" :class="{ open: menuOpen }">
-        <a href="#" @click.prevent="goSection('services')">Services</a>
-        <a href="#" @click.prevent="goSection('how-it-works')">How It Works</a>
-        <a href="#" @click.prevent="goSection('why-us')">Why Us</a>
-        <a href="#" @click.prevent="goSection('about')">About</a>
-        <a href="#" @click.prevent="goSection('contact')">Contact</a>
+        <a href="#how" @click.prevent="goSection('how')">How it Works</a>
+        <a href="#choose" @click.prevent="goSection('choose')">Why choose us</a>
+        <a href="#quiz" @click.prevent="goSection('quiz')">Quiz</a>
       </nav>
 
       <div class="nav-right">
-        <a href="#" class="btn-primary nav-cta" @click.prevent="goSection('contact')">Get Started</a>
-        <button class="hamburger" @click="menuOpen = !menuOpen" :class="{ active: menuOpen }">
+        <a href="#contact" class="btn-primary nav-cta" @click.prevent="goSection('contact')">Monetize Now</a>
+        <button class="hamburger" @click="menuOpen = !menuOpen" :class="{ active: menuOpen }" :aria-expanded="menuOpen" aria-label="Menu">
           <span></span><span></span><span></span>
         </button>
       </div>
@@ -31,6 +24,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { img } from '../lib/assets.js'
 
 const router = useRouter()
 const route = useRoute()
@@ -89,23 +83,10 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
   text-decoration: none;
   flex-shrink: 0;
 }
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  border-radius: 10px;
-  background: var(--gradient);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.logo-name {
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+.logo-img {
+  display: block;
+  width: 136px;
+  height: auto;
 }
 
 .nav-links {
@@ -173,6 +154,11 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     position: fixed;
     inset: 0;
     top: 68px;
+    /* The header's backdrop-filter makes it the containing block for this
+       fixed panel, so `bottom: 0` would end at the header's own edge.
+       An explicit height makes the panel cover the screen. */
+    bottom: auto;
+    height: calc(100dvh - 68px);
     background: rgba(8,11,22,0.97);
     backdrop-filter: blur(24px);
     flex-direction: column;
@@ -185,5 +171,11 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     margin-left: 0;
   }
   .nav-links.open { transform: translateX(0); }
+}
+
+@media (max-width: 480px) {
+  .logo-img { width: 104px; }
+  .nav-right { gap: 10px; }
+  .nav-cta { padding: 8px 14px; font-size: 0.8rem; }
 }
 </style>

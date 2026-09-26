@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { submitLead, isDemoMode } from './leadDelivery.js'
 
-const baseForm = { name: 'Jane Doe', email: 'jane@example.com', trafficType: 'web', message: 'Hi', botcheck: '' }
+const baseForm = { name: 'Jane Doe', email: 'jane@example.com', source: 'https://example.com', form: 'quiz', activity: 'Website Search', volume: 'Under 10 000 searches', botcheck: '' }
 
 describe('leadDelivery', () => {
   afterEach(() => {
@@ -36,5 +36,21 @@ describe('leadDelivery', () => {
       'https://api.web3forms.com/submit',
       expect.objectContaining({ method: 'POST' })
     )
+  })
+
+  it('sends the traffic source and quiz answers', async () => {
+    vi.stubEnv('VITE_WEB3FORMS_KEY', 'test-key')
+    const fetchSpy = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ success: true }) })
+    vi.stubGlobal('fetch', fetchSpy)
+
+    await submitLead(baseForm)
+    const body = JSON.parse(fetchSpy.mock.calls[0][1].body)
+    expect(body).toMatchObject({
+      email: 'jane@example.com',
+      traffic_source: 'https://example.com',
+      search_activity: 'Website Search',
+      daily_traffic: 'Under 10 000 searches',
+    })
+    expect(body.subject).toContain('quiz')
   })
 })

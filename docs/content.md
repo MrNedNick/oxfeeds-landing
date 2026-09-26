@@ -1,58 +1,73 @@
 # Content (canonical copy)
 
-Single source of truth for the site's wording and numbers. If copy changes here, change the Vue components to match (and vice-versa).
+Every word on the page comes from the live site, https://oxfeeds.com/ (read in full on 2026-09-26).
+Change copy there first, then here, then in the components. `src/tests/content.test.js` fails if a
+line below disappears from the page.
 
-## Source
+## Meta
 
-- **Original / live site:** https://oxfeeds.com/ — **this is the user's own site and the canonical content source.**
-- ⚠️ **NOT yet verbatim-verified.** The copy currently in the components was derived from an earlier analysis, not a line-by-line scrape. **Roadmap P6** is the task to open https://oxfeeds.com/ via Claude in Chrome, read every line, and reconcile this file + the components so nothing is invented and nothing is missing. Until that's done, treat the live site as authoritative over anything below.
+- **Title:** Search Traffic Monetization | Google, Bing & Yahoo Partners
+- **Description:** Monetize your search traffic with our exclusive partnerships. We help you grow revenue through Google, Bing & Yahoo search feeds. Easy integration, high RPM, and 24/7 support.
+- **Share (OG / Twitter):** same title; "Monetize your search traffic with our exclusive partnerships. We help you grow revenue through Google, Bing & Yahoo search feeds."; `public/img/og-image.jpg` (1200×630)
+- **Favicons:** `public/favicon/` — svg, 96px png, ico, apple-touch-icon
 
-## Identity
+## Navigation
 
-- **Company:** OXFeeds
-- **Live domain:** oxfeeds.com
-- **Contact email:** `office@oxfeeds.com` (nav/contact/footer — see `ContactUs.vue`)
-- **What they do:** search-traffic monetization partner.
+How it Works (`#how`) · Why choose us (`#choose`) · Quiz (`#quiz`) · Monetize Now (`#contact`)
 
-## Search feeds (the core offering)
+## Hero
 
-- **Google** — RSOC, Type-in
-- **Bing** — N2S, Type-in
-- **Yahoo** — N2S, Type-in
+- Monetize Your Search Traffic / **Like Never Before**
+- Grow your revenue with our exclusive partnerships and advanced search monetization strategies.
+- CTA: **Monetize Now** → contact form
 
-> Verify exact feed names/labels against the live site during P6.
+## We help to monetize your:
 
-## Headline stats (Hero count-up)
+Native to search · Browsers and Extensions · Add-ons · Start pages and Websites · Apps and Launchers · Social to search · Search to search
 
-The Hero shows animated `[data-count]` stats. **Exact numbers are TBD-verified** — confirm them against the live site in P6 and record the final values here so they're never "rounded up" by accident.
+## How It Works
 
-| Stat | Value | Status |
-|------|-------|--------|
-| (stat 1) | TODO confirm | from `HeroSection.vue` / live site |
-| (stat 2) | TODO confirm | |
-| (stat 3) | TODO confirm | |
+1. **Choose Your Feed** — Yahoo N2S/Type-in; Google RSOC/Type-in; Bing N2S/Type-in.
+2. **Integrate Seamlessly** — Our API and search feed solutions make it easy to monetize your traffic.
+3. **Earn More** — Get access to high-RPM feeds and large traffic caps.
 
-## Section copy (current site structure)
+## Why Choose Us?
 
-Order on `/`: Hero → Marquee → Services (feeds) → How It Works → Why Us → Quiz → About Us → Contact Us. Headings/body to be reconciled with the live site in P6.
+- **Exclusive Partnerships** — We collaborate with top search providers like Bing, Google and Yahoo.
+- **High Revenue Potential** — Maximize earnings with our premium search feed solutions.
+- **Seamless Integration** — Quick and easy implementation for all digital platforms.
+- **24/7 Support** — Our dedicated team ensures your success at every step.
+- CTA: **Monetize Now**
 
-## Contact / form
+## Quiz — "Don't know what to deal with? Take a quick quiz"
 
-- **Display email:** `office@oxfeeds.com`
-- **Contact info cards (in `ContactUs.vue`):** Response Time "Within 24 hours", Support "24/7 Available".
-- **Form fields:** `name`, `email`, `trafficType` (select), `message`.
-- **Current behaviour:** `handleSubmit` fakes a 1.4s delay, shows success, resets the form — **it sends nothing** (front-end stub). See roadmap P7.
+1. What search activity are you interested in? — Extensions and Add-ons · Website Search · Apps and Launchers · Native to Search · Display to Search · Search to Search
+2. Your daily traffic volume — Under 10 000 searches · 10 000 searches - 100 000 searches · More than 100 000 searches
+3. How can we reach you? — Your Name · Your Email · Provide your traffic source (https://www...)
 
-### Live form behaviour (to fill during P6 audit)
+Buttons: Return · Next · Send.
 
-> Inspect the `<form>` on https://oxfeeds.com/ via Claude in Chrome and record here so the real backend can be replicated. **Do not submit the live form.**
+## Contact
 
-- `action` URL: _TODO_
-- `method`: _TODO_
-- Field names: _TODO_
-- Submission target (own endpoint / Formspree / other / mailto): _TODO_
-- Success/redirect behaviour: _TODO_
+- Interested in growing your revenue with search monetization?
+- Reach out to our team **today.**
+- Fields: Your Name · Your Email · Provide your traffic source (https://www...) → **Send**
+- **office@oxfeeds.com**
 
-## Legal pages
+After sending (the live site's `/thank-you/` page): **Thank you for your request!** We have received your submission and will contact you shortly.
 
-`/privacy`, `/terms`, `/cookies`, `/gdpr` — current copy is a **template placeholder**. Review/replace with real jurisdiction- and company-specific text before launch.
+## Figures
+
+The live site publishes no figures, so the page shows none. The only numbers are the quiz's traffic
+thresholds.
+
+## Forms
+
+The live forms `POST` to the site's own WordPress endpoint (`admin-post.php`, with a nonce), which a
+static page cannot reuse. Here both forms go through `src/lib/leadDelivery.js` (Web3Forms) with the
+same fields; without `VITE_WEB3FORMS_KEY` they run in demo mode and say so.
+
+## Not on this page, on purpose
+
+- Legal pages and a cookie banner — the live site has neither, and this page sets no cookies.
+- "Made and developed by vau.agency" — credits the agency behind the live site's theme, not this page.

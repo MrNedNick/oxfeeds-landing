@@ -7,15 +7,14 @@
     <div class="container nf-inner">
       <div class="nf-code gradient-text">404</div>
       <h1>Page Not Found</h1>
-      <p>The page you're looking for doesn't exist or has been moved. Let's get you back to monetizing your traffic.</p>
+      <p>There is nothing at this address.</p>
       <div class="nf-actions">
         <router-link to="/" class="btn-primary">
-          Back to Home
+          Back to Home Page
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </router-link>
-        <a href="mailto:office@oxfeeds.com" class="btn-secondary">Contact Support</a>
       </div>
     </div>
   </main>

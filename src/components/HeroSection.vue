@@ -13,74 +13,37 @@
     </div>
 
     <div class="container hero-content">
-      <div class="hero-badge gradient-border reveal">
-        <span class="badge-dot"></span>
-        Official Google, Bing &amp; Yahoo Partner
-      </div>
-
       <h1 class="hero-title reveal delay-1">
-        Grow Your Revenue<br>
-        With <span class="gradient-text anim-gradient">Search Monetization</span>
+        Monetize Your Search Traffic<br>
+        <span class="gradient-text anim-gradient">Like Never Before</span>
       </h1>
 
       <p class="hero-sub reveal delay-2">
-        Exclusive partnerships and advanced strategies to maximize your search traffic earnings.
-        High-RPM feeds, large caps, and seamless integration for any platform.
+        Grow your revenue with our exclusive partnerships and advanced search monetization strategies.
       </p>
 
       <div class="hero-ctas reveal delay-3">
         <a href="#contact" class="btn-primary">
-          Start Monetizing
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          Monetize Now
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
             <path d="M3 8h10M9 4l4 4-4 4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <a href="#how-it-works" class="btn-secondary">
-          How It Works
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-            <path d="M8 3v10M4 9l4 4 4-4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
       </div>
 
-      <div class="hero-stats reveal delay-4">
-        <div class="stat">
-          <div class="stat-num gradient-text count-up" data-count="3">3</div>
-          <div class="stat-label">Major Search Partners</div>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat">
-          <div class="stat-num gradient-text count-up" data-count="7" data-suffix="+">7+</div>
-          <div class="stat-label">Traffic Formats</div>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat">
-          <div class="stat-num gradient-text">High</div>
-          <div class="stat-label">RPM Feeds</div>
-        </div>
-        <div class="stat-sep"></div>
-        <div class="stat">
-          <div class="stat-num gradient-text">24/7</div>
-          <div class="stat-label">Expert Support</div>
-        </div>
-      </div>
-
-      <div class="trusted reveal delay-5">
-        <span class="trusted-label">Powered by</span>
-        <div class="trusted-logos">
-          <div class="partner-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="#4285F4"/><path d="M12 6a6 6 0 100 12A6 6 0 0012 6z" fill="white"/><path d="M12 9a3 3 0 100 6 3 3 0 000-6z" fill="#4285F4"/></svg>
-            Google
-          </div>
-          <div class="partner-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#008373"/><path d="M4 12h16M4 8h10M4 16h13" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-            Bing
-          </div>
-          <div class="partner-badge">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect width="24" height="24" rx="4" fill="#720E9E"/><path d="M4 8l8 4 8-4M4 16l8 4 8-4M4 12h16" stroke="white" stroke-width="1.8" stroke-linecap="round"/></svg>
-            Yahoo
-          </div>
-        </div>
+      <!-- The search engines and browsers the feeds run through, floating
+           around a search bar — the same pieces as on oxfeeds.com. -->
+      <div class="hero-visual reveal delay-4" aria-hidden="true">
+        <img class="hv-search" :src="img('icons/search.svg')" alt="" width="377" height="85">
+        <img class="hv hv-google" :src="img('icons/google.svg')" alt="" width="228" height="85">
+        <img class="hv hv-bing" :src="img('icons/bing.svg')" alt="" width="228" height="85">
+        <img class="hv hv-yahoo" :src="img('icons/yahoo.svg')" alt="" width="228" height="85">
+        <img class="hv hv-safari" :src="img('icons/safari.svg')" alt="" width="228" height="85">
+        <img class="hv hv-firefox" :src="img('icons/firefox.svg')" alt="" width="228" height="85">
+        <img class="hv-deco hv-gear-1" :src="img('icons/gear-1.webp')" alt="" width="148" height="100">
+        <img class="hv-deco hv-gear-2" :src="img('icons/gear-2.svg')" alt="" width="68" height="78">
+        <img class="hv-deco hv-coin-1" :src="img('icons/coin-1.webp')" alt="" width="86" height="86">
+        <img class="hv-deco hv-coin-2" :src="img('icons/coin-2.webp')" alt="" width="86" height="100">
       </div>
     </div>
 
@@ -92,9 +55,7 @@
 
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
-import { useCountUp } from '../lib/vue/use-count-up'
-
-useCountUp('.count-up')
+import { img } from '../lib/assets.js'
 
 const heroEl = ref(null)
 const parallaxEl = ref(null)
@@ -240,26 +201,6 @@ onUnmounted(() => {
   gap: 28px;
 }
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(124,58,237,0.12);
-  border: 1px solid rgba(124,58,237,0.3);
-  border-radius: 50px;
-  padding: 8px 20px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--purple-light);
-}
-.badge-dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--purple-light);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
 .hero-title {
   font-size: clamp(2.5rem, 6vw, 5rem);
   font-weight: 900;
@@ -289,66 +230,40 @@ onUnmounted(() => {
   justify-content: center;
 }
 
-.hero-stats {
-  display: flex;
-  align-items: center;
-  gap: 32px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 20px;
-  padding: 24px 40px;
-  backdrop-filter: blur(20px);
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 20px 40px;
+.hero-visual {
+  position: relative;
+  width: min(760px, 100%);
+  height: 300px;
+  margin-top: 8px;
 }
-
-.stat { text-align: center; }
-.stat-num {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  line-height: 1;
+.hv-search {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(377px, 70%);
+  height: auto;
+  transform: translate(-50%, -50%);
+  filter: drop-shadow(0 16px 40px rgba(124,58,237,0.35));
 }
-.stat-label {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 4px;
-  white-space: nowrap;
+.hv, .hv-deco {
+  position: absolute;
+  height: auto;
+  animation: hv-float 7s ease-in-out infinite;
 }
-
-.stat-sep {
-  width: 1px;
-  height: 40px;
-  background: var(--card-border);
+@keyframes hv-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
-
-.trusted {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-.trusted-label {
-  font-size: 0.85rem;
-  color: var(--text-faint);
-}
-.trusted-logos { display: flex; gap: 12px; }
-.partner-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-muted);
-  transition: border-color 0.2s, color 0.2s;
-}
-.partner-badge:hover { border-color: rgba(124,58,237,0.4); color: var(--text); }
+.hv { width: clamp(110px, 22%, 170px); filter: drop-shadow(0 10px 24px rgba(0,0,0,0.35)); }
+.hv-google  { left: 2%;  top: 4%;  animation-delay: -1s; }
+.hv-bing    { right: 4%; top: 0;   animation-delay: -3s; }
+.hv-yahoo   { left: 8%;  bottom: 0; animation-delay: -5s; }
+.hv-safari  { right: 0;  bottom: 8%; animation-delay: -2s; }
+.hv-firefox { left: 38%; bottom: -6%; animation-delay: -4s; }
+.hv-gear-1 { width: 74px; left: 30%; top: -4%; animation-duration: 9s; }
+.hv-gear-2 { width: 40px; right: 30%; top: 8%; animation-duration: 8s; animation-delay: -2s; }
+.hv-coin-1 { width: 56px; right: 22%; bottom: 0; animation-duration: 6s; }
+.hv-coin-2 { width: 48px; left: 24%; top: 30%; animation-duration: 10s; animation-delay: -3s; }
 
 .scroll-hint {
   position: absolute;
@@ -385,8 +300,11 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .hero-stats { padding: 20px 24px; }
-  .stat-sep { display: none; }
   .hero-title { font-size: 2.25rem; }
+  .hero-visual { height: 230px; }
+  /* Five chips and four decorations do not fit a phone; keep the four
+     search engines/browsers around the search bar. */
+  .hv-deco, .hv-firefox { display: none; }
+  .hv-yahoo { left: 2%; }
 }
 </style>
