@@ -1,60 +1,24 @@
-# OXFeeds — Search Traffic Monetization Landing
+# OXFeeds — landing
 
-Modern, animated marketing site for OXFeeds, a search-traffic monetization partner
-(Google RSOC/Type-in, Bing N2S/Type-in, Yahoo N2S/Type-in).
+**[Live demo](https://mrnednick.github.io/oxfeeds-landing/)** · original site: [oxfeeds.com](https://oxfeeds.com/)
 
-Built with **Vue 3** + **Vite** + **Vue Router**. Purple/pink dark theme, glassmorphism,
-scroll-reveal, 3D card tilt, animated gradients, count-up stats, and a marquee strip.
+A redesign of the landing page for OXFeeds, a search-traffic monetization partner (Google RSOC/Type-in,
+Bing N2S/Type-in, Yahoo N2S/Type-in). The content is the real site's, word for word — every heading,
+list, quiz step and form field — with a new design: dark glass, scroll reveals, 3D tilt, parallax.
 
-## Pages
+**Vue 3 · Vite 5 · Vue Router · Vitest**
 
-| Route | Page |
-|-------|------|
-| `/` | Landing — hero, services, how it works, why us, interactive quiz, about, contact |
-| `/privacy` | Privacy Policy |
-| `/terms` | Terms of Service |
-| `/cookies` | Cookie Policy |
-| `/gdpr` | GDPR Compliance |
-| `*` | 404 Not Found |
-
-A GDPR cookie-consent banner (with per-category preferences, stored in `localStorage`)
-appears on first visit.
-
-## Project structure
-
-```
-src/
-  components/      Reusable UI (NavBar, HeroSection, GdprBanner, LegalLayout, …)
-  views/           Routed pages (HomeView + legal pages + NotFound)
-  composables/     useScrollReveal, useCountUp, useTilt
-  router/          Vue Router config (lazy-loaded legal pages)
-  style.css        Global design tokens, utilities, keyframes
-```
-
-## Development
+## Run it
 
 ```bash
 npm install
-npm run dev      # local dev server
-npm run build    # production build to dist/
-npm run preview  # preview the production build
+npm run dev      # http://localhost:5173
+npm test         # delivery adapter + a content guard against the live site's copy
+npm run build    # static build in dist/
 ```
 
-## Deployment
+The quiz and the contact form send through [Web3Forms](https://web3forms.com). Set
+`VITE_WEB3FORMS_KEY` to deliver for real; without it they run in a clearly labelled demo mode.
 
-This is a SPA using HTML5 history routing, so the host must rewrite unknown paths to
-`index.html`. Config is included for the two most common hosts:
-
-- **Netlify** — `public/_redirects`
-- **Vercel** — `vercel.json`
-
-For other hosts, add an equivalent catch-all rewrite to `index.html`.
-
-## Notes
-
-- The contact form currently simulates submission on the client. Wire it to a real
-  endpoint/service (e.g. Formspree or your own API) before going live.
-- Legal page copy is a solid starting template — review with counsel and replace
-  jurisdiction/company-specific details.
-
-Contact: office@oxfeeds.com
+Pushes to `main` are tested, built and deployed to GitHub Pages. Canonical copy lives in
+[`docs/content.md`](docs/content.md).
