@@ -166,6 +166,24 @@ section { padding: 110px 0; }
 .delay-5 { transition-delay: 0.5s !important; }
 .delay-6 { transition-delay: 0.6s !important; }
 
+/* Reduced motion: content is there from the first paint, and decoration holds still. */
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .reveal-left,
+  .reveal-right {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @keyframes float1 {
   0%,100% { transform: translate(0,0) scale(1); }
   33% { transform: translate(30px,-40px) scale(1.06); }

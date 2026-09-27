@@ -13,16 +13,16 @@
     </div>
 
     <div class="container hero-content">
-      <h1 class="hero-title reveal delay-1">
+      <h1 class="hero-title">
         Monetize Your Search Traffic<br>
         <span class="gradient-text anim-gradient">Like Never Before</span>
       </h1>
 
-      <p class="hero-sub reveal delay-2">
+      <p class="hero-sub">
         Grow your revenue with our exclusive partnerships and advanced search monetization strategies.
       </p>
 
-      <div class="hero-ctas reveal delay-3">
+      <div class="hero-ctas hero-in">
         <a href="#contact" class="btn-primary">
           Monetize Now
           <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
@@ -33,7 +33,7 @@
 
       <!-- The search engines and browsers the feeds run through, floating
            around a search bar — the same pieces as on oxfeeds.com. -->
-      <div class="hero-visual reveal delay-4" aria-hidden="true">
+      <div class="hero-visual hero-in hero-in-late" aria-hidden="true">
         <img class="hv-search" :src="img('icons/search.svg')" alt="" width="377" height="85">
         <img class="hv hv-google" :src="img('icons/google.svg')" alt="" width="228" height="85">
         <img class="hv hv-bing" :src="img('icons/bing.svg')" alt="" width="228" height="85">
@@ -297,6 +297,19 @@ onUnmounted(() => {
 @keyframes scroll-move {
   0%,100% { top: 6px; opacity: 1; }
   70% { top: 18px; opacity: 0; }
+}
+
+/* The first screen animates in on load with CSS alone. The headline and
+   subtitle are not animated at all: they are the largest paint, and holding
+   them at opacity 0 until an observer fires is what delayed it. */
+.hero-in { animation: hero-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both; }
+.hero-in-late { animation-delay: 0.3s; }
+@keyframes hero-in {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-in { animation: none; }
 }
 
 @media (max-width: 768px) {

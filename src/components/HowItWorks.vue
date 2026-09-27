@@ -15,7 +15,12 @@
               <span class="gradient-text">{{ String(i + 1).padStart(2, '0') }}</span>
             </div>
             <div class="step-media">
-              <img class="step-img" :src="img(`pictures/${step.picture}`)" alt="" width="720" height="578" loading="lazy">
+              <img
+                class="step-img"
+                :src="img(`pictures/${step.picture}.webp`)"
+                :srcset="`${img(`pictures/${step.picture}-400.webp`)} 400w, ${img(`pictures/${step.picture}.webp`)} 720w`"
+                sizes="(max-width: 900px) 280px, 280px"
+                alt="" width="720" height="578" loading="lazy">
               <img class="step-deco" :class="`step-deco-${i + 1}`" :src="img(`icons/${step.deco}`)" alt="" loading="lazy">
             </div>
             <h3>{{ step.title }}</h3>
@@ -52,19 +57,19 @@ const steps = [
   {
     title: 'Choose Your Feed',
     desc: 'Yahoo N2S/Type-in; Google RSOC/Type-in; Bing N2S/Type-in.',
-    picture: 'how-card-1.webp',
+    picture: 'how-card-1',
     deco: 'card-element-1.svg'
   },
   {
     title: 'Integrate Seamlessly',
     desc: 'Our API and search feed solutions make it easy to monetize your traffic.',
-    picture: 'how-card-2.webp',
+    picture: 'how-card-2',
     deco: 'card-element-2.svg'
   },
   {
     title: 'Earn More',
     desc: 'Get access to high-RPM feeds and large traffic caps.',
-    picture: 'how-card-3.webp',
+    picture: 'how-card-3',
     deco: 'card-element-4.svg'
   }
 ]

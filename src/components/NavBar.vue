@@ -167,10 +167,13 @@ onUnmounted(() => window.removeEventListener('scroll', onScroll))
     gap: 28px;
     font-size: 1.25rem;
     transform: translateX(100%);
-    transition: transform 0.35s ease;
+    /* Closed, the panel is hidden rather than only moved off screen: its links leave the tab order and it
+       adds no sideways scroll. Visibility flips after the slide-out, so the closing animation still plays. */
+    visibility: hidden;
+    transition: transform 0.35s ease, visibility 0s linear 0.35s;
     margin-left: 0;
   }
-  .nav-links.open { transform: translateX(0); }
+  .nav-links.open { transform: translateX(0); visibility: visible; transition: transform 0.35s ease; }
 }
 
 @media (max-width: 480px) {

@@ -73,7 +73,7 @@ vue`; `src/lib/core/*.ts` holds the framework-agnostic logic each one wraps.
 ## Build & base path (`vite.config.js`)
 
 ```js
-base: command === 'build' ? '/oxfeeds-landing/' : '/'
+base: command === 'build' || isPreview ? '/oxfeeds-landing/' : '/'
 ```
 Dev stays at `/` for a clean local URL; production is served from the project-page subpath.
 

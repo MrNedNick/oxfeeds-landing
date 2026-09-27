@@ -2,7 +2,7 @@
   <div class="marquee-band">
     <div class="marquee-fade marquee-fade-l"></div>
     <div class="marquee-track">
-      <div class="marquee-row" v-for="row in 2" :key="row" aria-hidden="row === 2 ? 'true' : null">
+      <div class="marquee-row" v-for="row in 2" :key="row" :aria-hidden="row === 2 ? 'true' : undefined">
         <span class="marquee-item" v-for="item in items" :key="row + item">
           <span class="m-dot"></span>{{ item }}
         </span>
@@ -52,7 +52,8 @@ const items = [
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: var(--text-muted);
+  /* Brighter than --text-muted: the band's pink glow lowers contrast. */
+  color: rgba(241,239,255,0.78);
   white-space: nowrap;
   transition: color 0.3s;
 }
